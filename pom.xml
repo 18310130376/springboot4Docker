@@ -45,8 +45,9 @@
                 <configuration>
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
-                    <dockerHost>https://192.168.99.100:2376</dockerHost>
+                    <dockerHost>https://192.168.99.101:2376</dockerHost>
                     <dockerCertPath>C:\Users\789\.docker\machine\machines\default</dockerCertPath>
+                    <pushImage>true</pushImage>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
