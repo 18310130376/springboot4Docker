@@ -43,7 +43,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.12</version>
                 <configuration>
-                 <imageName>13662241921/aaa</imageName>
+                 <imageName>13662241921/www</imageName>
                   <!--   <imageTags>
                         docker的tag为项目版本号、latest
                         <imageTag>${git.commit.id.abbrev}</imageTag>
