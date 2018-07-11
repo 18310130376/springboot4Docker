@@ -2,9 +2,9 @@
 <server>
     <id>docker-hub</id>
     <username>13662241921</username>
-    <password>{Ywkwm9JtZAMH/MCB3wMlZmsxTYgPD6ihheYiKlpiCCU=}</password>
+    <password>{mGlgLOmHsBwHWeP8ZtngysbxhQ0tk8Buku+wDndBCyg=}</password>
     <configuration>
-      <email>47540266@qq.com</email>
+      <email>47540266@qq.com</email> 
     </configuration>
 </server>
 </settings>
