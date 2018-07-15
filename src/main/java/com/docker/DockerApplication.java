@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@SpringBootApplication
+@SpringBootApplication 
 @RestController
 public class DockerApplication {
     
