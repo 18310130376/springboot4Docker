@@ -1,0 +1,1 @@
+create table docker_user(id int primary key auto_increment,username varchar(32));
