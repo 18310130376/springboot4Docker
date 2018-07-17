@@ -22,15 +22,10 @@
 	</parent>
 
 	<dependencies>
-		<!-- <dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency> -->
+		</dependency>-->
 
   <dependency>
      <groupId>io.dubbo.springboot</groupId>
@@ -38,15 +33,10 @@
      <version>1.0.0</version>
   </dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-
-	<!-- 	<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency> -->
+		</dependency>-->
 	</dependencies>
 	
 	<build>
@@ -157,20 +147,18 @@
 							<fromFile>target/app.tar</fromFile>
 							<!-- 部署目录 -->
 							<url>scp://root@192.168.48.131/root/app/</url>
-							 <!--  <toDir>apps/${project.artifactId}</toDir> -->
-							 <!--  <includes>lib/*,Hermes-service.jar</includes> -->
-                             <!-- <excludes>*</excludes> -->
+							 <!--<toDir>apps/${project.artifactId}</toDir> -->
+							 <!--<includes>lib/*,Hermes-service.jar</includes> -->
+                             <!--<excludes>*</excludes> -->
 							<commands>
-								<!-- 关闭tomcat -->
-								<!--  <command>rm -rf /root/app/*</command> -->
-								<!--  <command>mkdir /root/app</command> -->
-								 <command>tar -xvf /root/app/app.tar</command>
-								 <command>cd /root/app/</command>
-								 
+								<!--关闭tomcat -->
+								<!--<command>rm -rf /root/app/*</command> -->
+								<!--<command>mkdir /root/app</command> -->
+								<command>tar -xvf /root/app/app.tar</command>
+								<command>cd /root/app/</command>
 								<command>pkill -f ${name}.jar</command>
-								<!--  <command>pkill -f test.jar</command> -->
-								<!--  <command><![CDATA[nohup java -jar /root/app/${name}.jar > app.log 2>&1 &]]></command> -->
-								
+								<!--<command>pkill -f test.jar</command> -->
+								<!--<command><![CDATA[nohup java -jar /root/app/${name}.jar > app.log 2>&1 &]]></command> -->
 								<!--<command>echo $PATH</command>
 								<command>export JAVA_HOME=/opt/jdk1.8.0_131</command>
 								<command>export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH</command>
