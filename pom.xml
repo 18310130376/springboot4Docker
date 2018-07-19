@@ -115,6 +115,8 @@
 					<!-- <registryUrl>registry.cn-hangzhou.aliyuncs.com</registryUrl> -->
 					<serverId>docker-hub</serverId>
 					<!--<serverId>docker-hub</serverId> -->
+					<buildArgs>
+					</buildArgs>
 					<resources>
 						<resource>
 							<targetPath>/</targetPath>
