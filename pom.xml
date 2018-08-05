@@ -6,11 +6,10 @@
 	<version>1.0-SNAPSHOT</version>
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
-	<name>app</name>
-	
+	<name>springboot4Docker</name>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<docker.image.prefix>13662241921</docker.image.prefix>
 		<spring.boot.version>1.3.3.RELEASE</spring.boot.version>
 	</properties>
 
@@ -22,35 +21,29 @@
 	</parent>
 
 	<dependencies>
-		<!--<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>-->
-
-  <dependency>
-     <groupId>io.dubbo.springboot</groupId>
-     <artifactId>spring-boot-starter-dubbo</artifactId>
-     <version>1.0.0</version>
-  </dependency>
-
-		<!--<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>-->
-	</dependencies>
-	
-	<build>
-	<finalName>${name}</finalName>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>2.10</version>
-			</extension>
-		</extensions>
+		<dependency>
+			<groupId>io.dubbo.springboot</groupId>
+			<artifactId>spring-boot-starter-dubbo</artifactId>
+			<version>1.0.0</version>
+			<exclusions>
+            <exclusion>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+            </exclusion>
+        </exclusions>
+		</dependency>
 		
-		<plugins>
+<dependency> 
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-log4j</artifactId>
+</dependency>
+		
+		
+	</dependencies>
 
+	<build>
+		<finalName>${name}</finalName>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -61,21 +54,22 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
+						 <manifestEntries>
+                         <!--MANIFEST.MF 中 Class-Path加入资源文件目录,只能配置一个，后面的覆盖前面的 -->
+                         <Class-Path>./config/</Class-Path>
+                         </manifestEntries>
 					</archive>
-					<!-- 排除 jar 包中的配置文件 -->
 					<excludes>
-						<!--<exclude>config/**</exclude> -->
-						<exclude>**/*.properties</exclude>
-						<exclude>**/*.xml</exclude>
+						<exclude>config/**</exclude>
+						<exclude>log4j.properties</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
 
-
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<finalName>app</finalName>
+					<finalName>${name}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptors>
 						<descriptor>src/main/build/package.xml</descriptor>
@@ -86,7 +80,6 @@
 						<id>make-assembly</id>
 						<phase>package</phase>
 						<goals>
-							<!-- 打包只执行一次 -->
 							<goal>single</goal>
 						</goals>
 					</execution>
@@ -94,137 +87,9 @@
 			</plugin>
 
 			<plugin>
-				<!-- 启用编译插件 -->
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
-
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.4.12</version>
-				<configuration>
-					<imageName>13662241921/www</imageName>
-					<!--<imageTags> docker的tag为项目版本号、latest <imageTag>${git.commit.id.abbrev}</imageTag> 
-						<imageTag>latest</imageTag> </imageTags> -->
-
-					<!-- <baseImage>java</baseImage> -->
-					<!-- <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint> -->
-					<dockerDirectory>src/main/docker</dockerDirectory>
-					<!-- <dockerHost>https://192.168.99.100:2376</dockerHost> <dockerCertPath>C:\Users\789\.docker\machine\machines\default</dockerCertPath> -->
-					<pushImage>true</pushImage>
-					<!-- <registryUrl>registry.cn-hangzhou.aliyuncs.com</registryUrl> -->
-					<serverId>docker-hub</serverId>
-					<!--<serverId>docker-hub</serverId> -->
-					<buildArgs>
-					</buildArgs>
-					<resources>
-						<resource>
-							<targetPath>/</targetPath>
-							<directory>${project.build.directory}</directory>
-							<!-- <include>${project.build.finalName}.jar</include> -->
-							<include>${name}.jar</include>
-						</resource>
-					</resources>
-					<settingsFile>/settings.xml</settingsFile>
-				</configuration>
-			</plugin>
-
-
-         <plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<id>upload-deploy</id>
-						<phase>package</phase>
-						<goals>
-							<goal>upload-single</goal>
-							<goal>sshexec</goal>
-						</goals>
-						<configuration>
-						<!-- 此处maven的setting配置用户名和密码，不配置可也以 ，用scp://root:475402366@192.168.135.133/root/app/-->
-							<serverId>webserver</serverId>
-							<!-- 需要部署的文件 -->
-							<fromFile>target/app.tar</fromFile>
-							<!-- 部署目录 -->
-							<url>scp://root@192.168.48.131/root/app/</url>
-							 <!--<toDir>apps/${project.artifactId}</toDir> -->
-							 <!--<includes>lib/*,Hermes-service.jar</includes> -->
-                             <!--<excludes>*</excludes> -->
-							<commands>
-								<!--关闭tomcat -->
-								<!--<command>rm -rf /root/app/*</command> -->
-								<!--<command>mkdir /root/app</command> -->
-								<command>tar -xvf /root/app/app.tar</command>
-								<command>cd /root/app/</command>
-								<command>pkill -f ${name}.jar</command>
-								<!--<command>pkill -f test.jar</command> -->
-								<!--<command><![CDATA[nohup java -jar /root/app/${name}.jar > app.log 2>&1 &]]></command> -->
-								<!--<command>echo $PATH</command>
-								<command>export JAVA_HOME=/opt/jdk1.8.0_131</command>
-								<command>export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH</command>
-								 -->
-								<command>echo $JAVA_HOME</command> 
-								<command>echo $PATH</command> 
-								<command>nohup /opt/jdk1.8.0_131/bin/java -jar /root/app/${name}.jar > app.log 2>&amp;1 &amp;</command>
-								
-							    <!--<command>/home/hadoop/apache-tomcat-8.0.5/bin/shutdown.sh</command> -->
-								<!-- 删除之前解压后的目录 -->
-								<!-- <command>rm -rf /home/hadoop/apache-tomcat-8.0.5/webapps/osc-shop </command>-->
-								<!-- 启动tomcat -->
-								<!-- <command>/home/hadoop/apache-tomcat-8.0.5/bin/startup.sh</command> -->
-							</commands>
-							<displayCommandOutputs>true</displayCommandOutputs>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-
+			
 		</plugins>
 	</build>
-
-	<profiles>
-		<!-- 开发环境配置 -->
-		<profile>
-			<id>dev</id>
-			<properties>
-				<active.profile>dev</active.profile>
-				<application.name>dubbo-provider</application.name>
-				<registry.address>zookeeper://127.0.0.1:2181</registry.address>
-				<protocol.name>dubbo</protocol.name>
-				<protocol.port>20880</protocol.port>
-				<scan.basepackage>com.integration.boot.provider.service</scan.basepackage>
-			</properties>
-			<activation>
-				<!-- 默认使用开发环境 -->
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<!-- 测试环境配置 -->
-		<profile>
-			<id>test</id>
-			<properties>
-				<active.profile>test</active.profile>
-				<application.name>dubbo-demo-server-test</application.name>
-				<registry.address>N/A</registry.address>
-				<protocol.name>dubbo</protocol.name>
-				<protocol.port>20880</protocol.port>
-				<scan.basepackage>cn.wolfcode.dubbo.service</scan.basepackage>
-			</properties>
-		</profile>
-		<!-- 生产环境配置 -->
-		<profile>
-			<id>prd</id>
-			<properties>
-				<active.profile>prd</active.profile>
-				<application.name>dubbo-demo-server</application.name>
-				<registry.address>zookeeper://192.168.56.101:2181</registry.address>
-				<protocol.name>dubbo</protocol.name>
-				<protocol.port>20880</protocol.port>
-				<scan.basepackage>cn.wolfcode.dubbo.service</scan.basepackage>
-			</properties>
-		</profile>
-	</profiles>
 </project>
