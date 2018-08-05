@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
-@SpringBootApplication
+@SpringBootApplication 
 public class DockerApplication {
 
 	private static final Log logger = LogFactory
