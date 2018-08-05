@@ -11,7 +11,7 @@ public class DockerApplication {
 	private static final Log logger = LogFactory
 			.getLog(DockerApplication.class);
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException { 
 		
 		 //PropertyConfigurator.configure(System.getProperty("user.dir") + "/conf/log4j.properties"); 
 		System.out.println(System.getProperty("user.dir") + "/conf/log4j.properties");
